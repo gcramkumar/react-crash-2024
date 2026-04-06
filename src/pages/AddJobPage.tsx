@@ -30,30 +30,10 @@ const AddJobPage = ( { addJobSubmit } ) => {
         contactPhone
       }
     };
-
-    try {
-      const response = await fetch('/api/jobs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jobData)
-      });
-
-      if (response.ok) {
-        alert('Job added successfully!');
-        // Optionally, reset form fields here
-      } else {
-        alert('Failed to add job. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error adding job:', error);
-      alert('An error occurred while adding the job. Please try again.');
-    }
   
   addJobSubmit(jobData);
   return  navigate('/jobs');
-    
+
   };  
 
   return (

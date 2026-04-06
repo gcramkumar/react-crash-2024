@@ -14,10 +14,52 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
   
-  const addJob = (jobData) => {
+  const addJob = async (jobData) => {
     console.log('New job added:', jobData);
   // Here you can also update your state or make an API call to save the job
-  };
+    try {
+      const response = await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jobData)
+      });
+
+    if (response.ok) {
+        alert('Job added successfully!');
+        // Optionally, reset form fields here
+      } else {
+        alert('Failed to add job. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding job:', error);
+      alert('An error occurred while adding the job. Please try again.');
+    }
+    return
+
+};
+
+const deleteJob = async (id) => {
+  console.log('Job deleted:', id);
+  // Here you can also update your state or make an API call to delete the job
+  try {
+    const response = await fetch(`/api/jobs/${id}`, {
+      method: 'DELETE'
+    });
+
+    if (response.ok) {
+      alert('Job deleted successfully!');
+      // Optionally, update your state here to remove the deleted job from the UI
+    } else {
+      alert('Failed to delete job. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error deleting job:', error);
+    alert('An error occurred while deleting the job. Please try again.');
+  }
+  return
+}
 
   const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +67,7 @@ const App = () => {
       <Route index element={<HomePage />} />
       <Route path='/jobs' element={<JobsPage />} />
       <Route path='/add-job' element={<AddJobPage addJobSubmit={addJob} />} />
-      <Route path='/jobs/:id' element={<JobPage />} loader={jobLoader} />
+      <Route path='/jobs/:id' element={<JobPage deleteJob={deleteJob} />} loader={jobLoader} />
       <Route path='*' element={<NotFoundPage />} />
     </Route>
     )
